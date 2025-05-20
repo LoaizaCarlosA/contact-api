@@ -1,14 +1,41 @@
+require('dotenv').config();
+
 const express = require("express");
+const nodemailer = require("nodemailer");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.post("/contacto", (req, res) => {
+app.post("/contacto", async (req, res) => {
   const { nombre, correo, mensaje } = req.body;
-  console.log("Mensaje recibido:", nombre, correo, mensaje);
-  res.json({ status: "ok", message: "Mensaje recibido" });
+
+  // Configura el transporter con variables de entorno
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  // Configura el correo
+  let mailOptions = {
+    from: correo,
+    to: process.env.EMAIL_USER,
+    subject: `Nuevo mensaje de contacto de ${nombre}`,
+    text: mensaje
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Correo enviado");
+    res.json({ status: "ok", message: "Correo enviado" });
+  } catch (error) {
+    console.error("Error enviando correo:", error);
+    res.status(500).json({ status: "error", message: "No se pudo enviar el correo" });
+  }
 });
 
 app.listen(PORT, () => {
