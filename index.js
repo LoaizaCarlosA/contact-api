@@ -26,23 +26,10 @@ app.post("/contacto", async (req, res) => {
   });
 
   let mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: correo,
     to: process.env.EMAIL_USER,
-    replyTo: correo,
     subject: `Nuevo mensaje de contacto de ${nombre}`,
-    text: `Tienes un mensaje de "${nombre}" del correo "${correo}": "${mensaje}"`, // texto plano para clientes que no soportan HTML
-    html: `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <h2 style="color: #005f99;">Nuevo mensaje de contacto</h2>
-        <p><strong>De:</strong> ${nombre} &lt;${correo}&gt;</p>
-        <p><strong>Mensaje:</strong></p>
-        <p style="background: #f4f4f4; padding: 10px; border-radius: 5px; border: 1px solid #ddd;">
-          ${mensaje.replace(/\n/g, "<br>")}
-        </p>
-        <hr style="border:none; border-top:1px solid #eee; margin-top: 20px;">
-        <p style="font-size: 0.9em; color: #777;">Este mensaje fue enviado desde tu formulario de contacto.</p>
-      </div>
-    `,
+    text: mensaje,
   };
 
   try {
