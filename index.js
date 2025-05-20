@@ -25,11 +25,32 @@ app.post("/contacto", async (req, res) => {
     },
   });
 
+  // let mailOptions = {
+  //   from: correo,
+  //   to: process.env.EMAIL_USER,
+  //   subject: `Nuevo mensaje de contacto de ${nombre} con correo ${correo}`,
+  //   text: mensaje,
+  // };
+
   let mailOptions = {
-    from: correo,
+    from: process.env.EMAIL_USER,
     to: process.env.EMAIL_USER,
-    subject: `Nuevo mensaje de contacto de ${nombre} con correo ${correo}`,
-    text: mensaje,
+    replyTo: correo, // útil para que puedas responder directamente al remitente
+    subject: `Nuevo mensaje de contacto de ${nombre}`,
+    text: `Has recibido un nuevo mensaje de contacto:\n\nNombre: ${nombre}\nCorreo: ${correo}\n\nMensaje:\n${mensaje}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2 style="color: #0077cc;">Nuevo mensaje de contacto</h2>
+        <p><strong>Nombre:</strong> ${nombre}</p>
+        <p><strong>Correo:</strong> <a href="mailto:${correo}">${correo}</a></p>
+        <p><strong>Mensaje:</strong></p>
+        <div style="padding: 10px; background-color: #f5f5f5; border-left: 4px solid #0077cc; margin-top: 5px; border-radius: 5px;">
+          ${mensaje.replace(/\n/g, "<br>")}
+        </div>
+        <hr style="margin-top: 20px; border: none; border-top: 1px solid #ccc;" />
+        <small style="color: #888;">Este mensaje fue enviado desde el formulario de contacto de tu portafolio.</small>
+      </div>
+    `
   };
 
   try {
