@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
@@ -6,9 +6,11 @@ const nodemailer = require("nodemailer");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: 'https://loaizacarlosa.github.io/Portafolio'
-}));
+app.use(
+  cors({
+    origin: "https://loaizacarlosa.github.io",
+  })
+);
 
 app.use(express.json());
 
@@ -19,15 +21,15 @@ app.post("/contacto", async (req, res) => {
     service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
+      pass: process.env.EMAIL_PASS,
+    },
   });
 
   let mailOptions = {
     from: correo,
     to: process.env.EMAIL_USER,
     subject: `Nuevo mensaje de contacto de ${nombre}`,
-    text: mensaje
+    text: mensaje,
   };
 
   try {
@@ -36,7 +38,9 @@ app.post("/contacto", async (req, res) => {
     res.json({ status: "ok", message: "Correo enviado" });
   } catch (error) {
     console.error("Error enviando correo:", error);
-    res.status(500).json({ status: "error", message: "No se pudo enviar el correo" });
+    res
+      .status(500)
+      .json({ status: "error", message: "No se pudo enviar el correo" });
   }
 });
 
