@@ -1,17 +1,20 @@
 require('dotenv').config();
-
 const express = require("express");
+const cors = require("cors");
 const nodemailer = require("nodemailer");
-const app = express();
 
+const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: 'https://loaizacarlosa.github.io/Portafolio'
+}));
 
 app.use(express.json());
 
 app.post("/contacto", async (req, res) => {
   const { nombre, correo, mensaje } = req.body;
 
-  // Configura el transporter con variables de entorno
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -20,7 +23,6 @@ app.post("/contacto", async (req, res) => {
     }
   });
 
-  // Configura el correo
   let mailOptions = {
     from: correo,
     to: process.env.EMAIL_USER,
