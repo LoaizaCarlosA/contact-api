@@ -28,7 +28,7 @@ app.post("/contacto", async (req, res) => {
   let mailOptions = {
     from: correo,
     to: process.env.EMAIL_USER,
-    subject: `Nuevo mensaje de contacto de ${nombre}`,
+    subject: `Nuevo mensaje de contacto de ${nombre} con correo ${correo}`,
     text: mensaje,
   };
 
